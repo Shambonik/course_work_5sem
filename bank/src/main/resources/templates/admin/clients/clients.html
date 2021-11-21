@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты</title>
+</head>
+<body>
+<a href="/admin">Главная</a>
+<br>
+
+<form enctype="multipart/form-data" th:action="@{/admin/clients/find_by_passport_number}" method="get" th:object="${findByPassportNumber}">
+    <label>Серия и номер паспорта: <input type="text" th:field="*{passportNumber}"/> </label>
+    <br>
+    <div><input type="submit" value="Поиск"/></div>
+</form>
+<div th:each = "client : ${list}" style="border: 2px dashed; padding: 10px;">
+    <span th:text="${client.getFullName()}"></span>
+    <br>
+    <span th:text="${client.getPassportNumber()}"></span>
+    <br>
+    <form th:method="get" th:action="@{/admin/clients/{id}/add_card (id = ${client.getId()})}">
+        <div><input type="submit" value="Добавить карту"/></div>
+    </form>
+    <form th:method="get" th:action="@{/admin/clients/{id}/add_account (id = ${client.getId()})}">
+        <div><input type="submit" value="Добавить счет"/></div>
+    </form>
+    <br>
+</div>
+<form th:method="get" th:action="@{/admin/clients/add_client}">
+    <div><input type="submit" value="Добавить клиента"/></div>
+</form>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление клиента</title>
+</head>
+<body>
+<a href="/admin_menu">Главная</a>
+<h1>Добавление клиента</h1>
+<form enctype="multipart/form-data" th:action="@{/admin/clients/add_client}" method="post" th:object="${client}">
+    <div>
+        <label>Фамилия: <input type="text" th:field="*{firstname}"/> </label>
+        <span style="color: red" th:text="${firstnameErr}"></span>
+    </div>
+    <div>
+        <label>Имя: <input type="text" th:field="*{lastname}"/> </label>
+        <span style="color: red" th:text="${lastnameErr}"></span>
+    </div>
+    <div>
+        <label>Отчество: <input type="text" th:field="*{middlename}"/> </label>
+        <span style="color: red" th:text="${middlenameErr}"></span>
+    </div>
+    <div>
+        <label>Серия и номер паспорта: <input type="text" th:field="*{passportNumber}"/> </label>
+        <span style="color: red" th:text="${passportNumberErr}"></span>
+    </div>
+    <div><input type="submit" value="Добавить"/></div>
+</form>
+</body>
+</html>
