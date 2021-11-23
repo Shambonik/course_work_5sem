@@ -17,7 +17,10 @@ public class ClientDetails {
     private String middlename;
     private String passportNumber;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private Set<Card> cards;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private Set<Account> accounts;
 
 }

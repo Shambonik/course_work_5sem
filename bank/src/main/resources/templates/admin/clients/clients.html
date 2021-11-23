@@ -18,11 +18,11 @@
     <br>
     <span th:text="${client.getPassportNumber()}"></span>
     <br>
-    <form th:method="get" th:action="@{/admin/clients/{id}/add_card (id = ${client.getId()})}">
-        <div><input type="submit" value="Добавить карту"/></div>
+    <form th:method="get" th:action="@{/admin/clients/{id}/cards (id = ${client.getId()})}">
+        <div><input type="submit" value="Карты"/></div>
     </form>
-    <form th:method="get" th:action="@{/admin/clients/{id}/add_account (id = ${client.getId()})}">
-        <div><input type="submit" value="Добавить счет"/></div>
+    <form th:method="get" th:action="@{/admin/clients/{id}/accounts (id = ${client.getId()})}">
+        <div><input type="submit" value="Счета"/></div>
     </form>
     <br>
 </div>

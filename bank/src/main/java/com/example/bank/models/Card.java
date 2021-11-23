@@ -1,9 +1,10 @@
 package com.example.bank.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cards")
@@ -14,7 +15,7 @@ public class Card {
     private long id;
     private String number;
     private String cardHolder;
-    private Date validDate;
+    private LocalDate validDate;
     private Integer cvv;
 
     @ManyToOne

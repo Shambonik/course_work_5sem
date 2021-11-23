@@ -1,14 +1,15 @@
 package com.example.bank.services;
 
-import com.example.bank.dto.ClientListDTO;
-import com.example.bank.dto.FindByPassportNumberDTO;
+import com.example.bank.dto.*;
+import com.example.bank.models.Card;
 import com.example.bank.models.ClientDetails;
+import com.example.bank.repositories.CardRepo;
 import com.example.bank.repositories.ClientRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,21 +17,65 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClientService {
     private final ClientRepo clientRepo;
+    private final CardRepo cardRepo;
 
-    public List<ClientListDTO> getClientList(){
+    public List<ClientListDTO> getClientList() {
         return clientListToDTO(clientRepo.findAll());
     }
 
-    public String filterByPassportNumber(FindByPassportNumberDTO findByPassportNumberDTO, RedirectAttributes redirectAttributes){
+    public ClientDetails getClientById(Long id) {
+        return clientRepo.findClientDetailsById(id);
+    }
+
+    public String filterByPassportNumber(FindByPassportNumberDTO findByPassportNumberDTO, RedirectAttributes redirectAttributes) {
         String passportNumber = findByPassportNumberDTO.getPassportNumber().replace(" ", "");
-        if(!"".equals(passportNumber)) {
+        if (!"".equals(passportNumber)) {
             redirectAttributes.addFlashAttribute("list", clientListToDTO(clientRepo.findByPassportNumber(passportNumber)));
             redirectAttributes.addFlashAttribute("findByPassportNumber", findByPassportNumberDTO);
         }
         return "redirect:/admin/clients";
     }
 
-    private List<ClientListDTO> clientListToDTO(List<ClientDetails> clientDetails){
+    public String addClient(AddClientDTO dto) {
+        ClientDetails client = new ClientDetails();
+        client.setFirstname(dto.getFirstname());
+        client.setLastname(dto.getLastname());
+        client.setMiddlename(dto.getMiddlename());
+        client.setPassportNumber(dto.getPassportNumber());
+        clientRepo.save(client);
+        return "redirect:/admin/clients";
+    }
+
+    public String findCardByNumber(Long id, FindCardByNumberDTO dto, RedirectAttributes redirectAttributes) {
+        ClientDetails client = getClientById(id);
+        String number = dto.getCardNumber();
+        if (!"".equals(number)) {
+            client.setCards(client.getCards().stream()
+                    .filter(card -> card.getNumber().equals(number))
+                    .collect(Collectors.toSet()));
+            redirectAttributes.addFlashAttribute("client", client);
+            redirectAttributes.addFlashAttribute("findByNumber", dto);
+        }
+        return "redirect:/admin/clients/" + id + "/cards";
+    }
+
+    public String addCard(Long id, AddCardDTO dto){
+        Card card = new Card();
+        card.setNumber(dto.getNumber());
+        card.setCvv(dto.getCvv());
+        String[] dateStrings = dto.getValidDate().split("-");
+        LocalDate date = LocalDate.of(
+                Integer.parseInt(dateStrings[0]),
+                Integer.parseInt(dateStrings[1]),
+                Integer.parseInt(dateStrings[2])
+        );
+        card.setValidDate(date);
+        card.setClient(getClientById(id));
+        cardRepo.save(card);
+        return "redirect:/admin/clients/" + id + "/cards";
+    }
+
+    private List<ClientListDTO> clientListToDTO(List<ClientDetails> clientDetails) {
         return clientDetails.stream()
                 .map((client) -> {
                     ClientListDTO dto = new ClientListDTO();
@@ -38,7 +83,7 @@ public class ClientService {
                     fullName.append(client.getFirstname())
                             .append(" ")
                             .append(client.getLastname());
-                    if(client.getMiddlename() != null){
+                    if (client.getMiddlename() != null) {
                         fullName.append(" ")
                                 .append(client.getMiddlename());
                     }

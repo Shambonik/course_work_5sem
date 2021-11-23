@@ -1,11 +1,18 @@
 package com.example.bank.controllers;
 
+import com.example.bank.dto.AddCardDTO;
+import com.example.bank.dto.AddClientDTO;
 import com.example.bank.dto.FindByPassportNumberDTO;
+import com.example.bank.dto.FindCardByNumberDTO;
+import com.example.bank.models.Card;
+import com.example.bank.models.ClientDetails;
 import com.example.bank.services.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -42,4 +49,52 @@ public class AdminController {
         return clientService.filterByPassportNumber(findByPassportNumberDTO, redirectAttributes);
     }
 
+    @GetMapping("/clients/add_client")
+    public String getAddClientPage(Model model) {
+        model.addAttribute("client", new AddClientDTO());
+        return "admin/clients/add_client";
+    }
+
+    @PostMapping("/clients/add_client")
+    public String addClient(AddClientDTO dto){
+        return clientService.addClient(dto);
+    }
+
+    @GetMapping("/clients/{id}/cards")
+    public String getCardsPage(@PathVariable("id") long id, Model model, HttpServletRequest request){
+        Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+        if (map != null) {
+            for (Map.Entry<String, ?> entry : map.entrySet()) {
+                model.addAttribute(entry.getKey(), entry.getValue());
+            }
+        }
+        if (!model.containsAttribute("client")) {
+            ClientDetails client = clientService.getClientById(id);
+            model.addAttribute("client", client);
+        }
+        if (!model.containsAttribute("findByNumber")){
+            model.addAttribute("findByNumber", new FindCardByNumberDTO());
+        }
+        return "admin/clients/cards/cards";
+    }
+
+    @GetMapping("/clients/{id}/cards/find_by_number")
+    public String filterCardsByNumber(@PathVariable("id") long id, FindCardByNumberDTO dto, RedirectAttributes redirectAttributes) {
+        return clientService.findCardByNumber(id, dto, redirectAttributes);
+    }
+
+    /*
+    * TODO Полная генерация карты
+    */
+    @GetMapping("/clients/{id}/cards/add_card")
+    public String getAddCardPage(@PathVariable("id") long id, Model model){
+        model.addAttribute("clientId", id);
+        model.addAttribute("card", new AddCardDTO());
+        return "admin/clients/cards/add_card";
+    }
+
+    @PostMapping("/clients/{id}/cards/add_card")
+    public String addCard(@PathVariable("id") long id, AddCardDTO dto){
+        return clientService.addCard(id, dto);
+    }
 }

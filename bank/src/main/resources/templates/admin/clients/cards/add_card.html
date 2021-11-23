@@ -7,7 +7,7 @@
 <body>
 <a href="/admin_menu">Главная</a>
 <h1>Добавление карты</h1>
-<form enctype="multipart/form-data" th:action="@{/admin/clients/{id}/add_card (id = ${card.getClientId()})}" method="post" th:object="${card}">
+<form enctype="multipart/form-data" th:action="@{/admin/clients/{id}/cards/add_card (id = ${clientId})}" method="post" th:object="${card}">
     <div>
         <label>Номер карты: <input type="text" th:field="*{number}"/> </label>
         <span style="color: red" th:text="${numberErr}"></span>
