@@ -42,6 +42,7 @@ public class ClientService {
         client.setLastname(dto.getLastname());
         client.setMiddlename(dto.getMiddlename());
         client.setPassportNumber(dto.getPassportNumber());
+        client.setEmail(dto.getEmail());
         clientRepo.save(client);
         return "redirect:/admin/clients";
     }

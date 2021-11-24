@@ -1,14 +1,15 @@
 package com.example.bank.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "cards")
-@Data
+@Getter
+@Setter
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

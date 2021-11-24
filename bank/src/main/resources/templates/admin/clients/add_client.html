@@ -24,6 +24,10 @@
         <label>Серия и номер паспорта: <input type="text" th:field="*{passportNumber}"/> </label>
         <span style="color: red" th:text="${passportNumberErr}"></span>
     </div>
+    <div>
+        <label>E-mail: <input type="email" th:field="*{email}"/> </label>
+        <span style="color: red" th:text="${emailErr}"></span>
+    </div>
     <div><input type="submit" value="Добавить"/></div>
 </form>
 </body>

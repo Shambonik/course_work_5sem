@@ -9,4 +9,5 @@ public class AddClientDTO {
     private String lastname;
     private String middlename;
     private String passportNumber;
+    private String email;
 }
