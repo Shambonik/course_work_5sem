@@ -64,6 +64,7 @@ public class ClientService {
         Card card = new Card();
         card.setNumber(dto.getNumber());
         card.setCvv(dto.getCvv());
+        card.setMoney(0);
         String[] dateStrings = dto.getValidDate().split("-");
         LocalDate date = LocalDate.of(
                 Integer.parseInt(dateStrings[0]),

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пополнение карты</title>
+</head>
+<body>
+<a href="/admin">Главная</a>
+<br>
+<h2>Пополнение карты</h2>
+<span th:text="${card.getNumber()}"></span>
+<br>
+<span th:text="${card.getMoney()}"></span>
+<span> ₽</span>
+<form th:method="put" th:action="@{/admin/cards/{id}/top_up (id = ${card.getId()})}" th:object="${topUp}">
+    <label>На сколько пополнить: <input type="text" th:field="*{money}"/></label>
+    <span> ₽</span>
+    <br>
+    <div><input type="submit" value="Пополнить"/></div>
+</form>
+</body>
+</html>

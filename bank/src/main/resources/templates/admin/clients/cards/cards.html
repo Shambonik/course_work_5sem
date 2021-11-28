@@ -20,7 +20,10 @@
     <span th:text="${card.getNumber()}"></span>
     <br>
     <span th:text="${card.getValidDate()}"></span>
-    <form th:method="put" th:action="@{/admin/cards/block/{id} (id = ${card.getId()})}">
+    <form th:method="get" th:action="@{/admin/cards/{id}/top_up (id = ${card.getId()})}">
+        <div><input type="submit" value="Пополнить"/></div>
+    </form>
+    <form th:method="put" th:action="@{/admin/cards/{id}/block/ (id = ${card.getId()})}">
         <div><input type="submit" value="Заблокировать"/></div>
     </form>
     <br>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+<h2>Карты</h2>
+<div th:each = "card : ${cards}" style="border: 2px dashed; padding: 10px;">
+    <span>Номер: </span>
+    <span th:text="${card.getNumber()}"></span>
+    <br>
+    <br>
+    <span th:text="${card.getMoney()}"></span>
+    <span>  ₽</span>
+    <br>
+    <form th:method="get" th:action="@{/client/card/{id} (id = ${card.getId()})}">
+        <div><input type="submit" value="Действия"/></div>
+    </form>
+    <br>
+</div>
+<h2>Счета</h2>
+<div th:each = "account : ${accounts}" style="border: 2px dashed; padding: 10px;">
+    <span th:text="${account.getNumber()}"></span>
+    <br>
+    <span th:text="${account.getMoney()}"></span>
+    <br>
+    <form th:method="get" th:action="@{/client/account/{id} (id = ${account.getId()})}">
+        <div><input type="submit" value="Действия"/></div>
+    </form>
+    <br>
+</div>
+</body>
+</html>

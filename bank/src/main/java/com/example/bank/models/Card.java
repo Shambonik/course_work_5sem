@@ -17,7 +17,8 @@ public class Card {
     private String number;
     private String cardHolder;
     private LocalDate validDate;
-    private Integer cvv;
+    private int cvv;
+    private int money;
 
     @ManyToOne
     private ClientDetails client;

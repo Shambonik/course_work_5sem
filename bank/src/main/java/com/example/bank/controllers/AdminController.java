@@ -1,19 +1,14 @@
 package com.example.bank.controllers;
 
-import com.example.bank.dto.AddCardDTO;
-import com.example.bank.dto.AddClientDTO;
-import com.example.bank.dto.FindByPassportNumberDTO;
-import com.example.bank.dto.FindCardByNumberDTO;
+import com.example.bank.dto.*;
 import com.example.bank.models.Card;
 import com.example.bank.models.ClientDetails;
+import com.example.bank.services.CardService;
 import com.example.bank.services.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
@@ -25,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final ClientService clientService;
+    private final CardService cardService;
 
     @GetMapping("/clients")
     public String getClientsPage(Model model, HttpServletRequest request) {
@@ -96,5 +92,18 @@ public class AdminController {
     @PostMapping("/clients/{id}/cards/add_card")
     public String addCard(@PathVariable("id") long id, AddCardDTO dto){
         return clientService.addCard(id, dto);
+    }
+
+    @GetMapping("/cards/{id}/top_up")
+    public String getTopUpCardPage(@PathVariable("id") long id, Model model){
+        model.addAttribute("card", cardService.findCardById(id));
+        model.addAttribute("topUp", new TopUpDTO());
+        return "/admin/clients/cards/top_up_card";
+    }
+
+    @PutMapping("/cards/{id}/top_up")
+    public String topUpCard(@PathVariable("id") long id, TopUpDTO dto){
+        cardService.topUpCard(id, dto);
+        return "redirect:/admin/cards/"+id+"/top_up";
     }
 }
