@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление счета</title>
+</head>
+<body>
+    <a href="/admin_menu">Главная</a>
+    <h1>Добавление счета</h1>
+    <h3>Типы счетов</h3>
+    <div th:each = "type : ${types}" style="border: 2px dashed; padding: 10px;">
+        <span>Название: </span>
+        <span th:text="${type.getName()}"></span>
+        <br>
+        <span>Процент: </span>
+        <span th:text="${type.getPercent()}"></span>
+        <span>%</span>
+        <form enctype="multipart/form-data" th:action="@{/admin/clients/{id}/accounts/add_account/{accType} (id = ${clientId}, accType = ${type.getId()})}" method="post">
+            <div><input type="submit" value="Открыть счет"/></div>
+        </form>
+        <br>
+    </div>
+</body>
+</html>

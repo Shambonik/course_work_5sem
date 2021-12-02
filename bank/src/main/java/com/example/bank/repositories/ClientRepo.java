@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ClientRepo extends JpaRepository<ClientDetails, Long> {
     ClientDetails findClientDetailsById(Long id);
+
     List<ClientDetails> findByPassportNumber(String passportNumber);
 }

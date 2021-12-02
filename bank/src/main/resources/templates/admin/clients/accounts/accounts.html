@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Карты</title>
+</head>
+<body>
+<a href="/admin">Главная</a>
+<br>
+<h2>Счета</h2>
+<span th:text="${client.getLastname()}"> </span>
+<span th:text="${client.getFirstname()}"> </span>
+<span th:text="${client.getMiddlename()}"> </span>
+<div th:each = "account : ${client.getAccounts()}" style="border: 2px dashed; padding: 10px;">
+    <span>Название: </span>
+    <span th:text="${account.getName()}"></span>
+    <br>
+    <span>Процент: </span>
+    <span th:text="${account.getAccountType().getPercent()}"></span>
+    <span>%</span>
+    <form th:method="put" th:action="@{/admin/account/{id}/block/ (id = ${account.getId()})}">
+        <div><input type="submit" value="Закрыть счет"/></div>
+    </form>
+    <br>
+</div>
+<form th:method="get" th:action="@{/admin/clients/{id}/accounts/add_account (id = ${client.getId()})}">
+    <div><input type="submit" value="Добавить счет"/></div>
+</form>
+</body>
+</html>

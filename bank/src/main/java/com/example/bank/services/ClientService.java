@@ -1,16 +1,20 @@
 package com.example.bank.services;
 
 import com.example.bank.dto.*;
+import com.example.bank.models.Account;
+import com.example.bank.models.AccountType;
 import com.example.bank.models.Card;
 import com.example.bank.models.ClientDetails;
 import com.example.bank.repositories.CardRepo;
 import com.example.bank.repositories.ClientRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 public class ClientService {
     private final ClientRepo clientRepo;
     private final CardRepo cardRepo;
+    private final AccountService accountService;
 
     public List<ClientListDTO> getClientList() {
         return clientListToDTO(clientRepo.findAll());
@@ -60,10 +65,10 @@ public class ClientService {
         return "redirect:/admin/clients/" + id + "/cards";
     }
 
-    public String addCard(Long id, AddCardDTO dto){
+    public String addCard(Long id, AddCardDTO dto) {
         Card card = new Card();
         card.setNumber(dto.getNumber());
-        card.setCvv(dto.getCvv());
+        card.setCvv((new Random()).nextInt(900) + 100);
         card.setMoney(0);
         String[] dateStrings = dto.getValidDate().split("-");
         LocalDate date = LocalDate.of(
@@ -72,9 +77,25 @@ public class ClientService {
                 Integer.parseInt(dateStrings[2])
         );
         card.setValidDate(date);
+        card.setActive(true);
         card.setClient(getClientById(id));
         cardRepo.save(card);
         return "redirect:/admin/clients/" + id + "/cards";
+    }
+
+    public String addAccount(long id, long accType) {
+        Account account = new Account();
+        AccountType accountType = accountService.findAccountTypeById(accType);
+        ClientDetails client = getClientById(id);
+        int accountListSize = accountService.findAllAccountsByClientAndAccountType(client, accountType).size();
+        String name = accountType.getName() + (accountListSize > 0 ? " " + accountListSize : "");
+        account.setName(name);
+        account.setAccountType(accountType);
+        account.setClient(client);
+        account.setActive(true);
+        account.setMoney(0);
+        accountService.saveAccount(account);
+        return "redirect:/admin/clients/" + id + "/accounts";
     }
 
     private List<ClientListDTO> clientListToDTO(List<ClientDetails> clientDetails) {

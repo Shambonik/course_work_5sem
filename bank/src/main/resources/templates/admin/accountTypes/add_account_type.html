@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление типа счета</title>
+</head>
+<body>
+    <a href="/admin_menu">Главная</a>
+    <h1>Добавление типа счета</h1>
+    <form enctype="multipart/form-data" th:action="@{/admin/add_account_type}" method="post" th:object="${accountType}">
+        <div>
+            <label>Название: <input type="text" th:field="*{name}"/> </label>
+            <span style="color: red" th:text="${nameErr}"></span>
+        </div>
+        <div>
+            <label>Процент: <input type="number" th:field="*{percent}"/></label>
+            <span>% </span>
+            <span style="color: red" th:text="${percentErr}"></span>
+        </div>
+        <div><input type="submit" value="Добавить"/></div>
+    </form>
+</body>
+</html>

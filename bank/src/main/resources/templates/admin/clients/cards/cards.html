@@ -17,8 +17,10 @@
     <div><input type="submit" value="Поиск"/></div>
 </form>
 <div th:each = "card : ${client.getCards()}" style="border: 2px dashed; padding: 10px;">
+    <span>Номер карты: </span>
     <span th:text="${card.getNumber()}"></span>
     <br>
+    <span>Действительна до: </span>
     <span th:text="${card.getValidDate()}"></span>
     <form th:method="get" th:action="@{/admin/cards/{id}/top_up (id = ${card.getId()})}">
         <div><input type="submit" value="Пополнить"/></div>

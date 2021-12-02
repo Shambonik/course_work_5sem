@@ -6,20 +6,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "accountTypes")
 @Getter
 @Setter
-public class Account {
+public class AccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private int money;
-    private boolean active;
-
-    @ManyToOne
-    private AccountType accountType;
-
-    @ManyToOne
-    private ClientDetails client;
+    private String percent;
 }

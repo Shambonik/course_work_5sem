@@ -2,12 +2,9 @@ package com.example.bank.services;
 
 import com.example.bank.dto.TopUpDTO;
 import com.example.bank.models.Card;
-import com.example.bank.models.ClientDetails;
 import com.example.bank.repositories.CardRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

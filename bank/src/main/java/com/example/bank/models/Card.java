@@ -19,6 +19,7 @@ public class Card {
     private LocalDate validDate;
     private int cvv;
     private int money;
+    private boolean active;
 
     @ManyToOne
     private ClientDetails client;

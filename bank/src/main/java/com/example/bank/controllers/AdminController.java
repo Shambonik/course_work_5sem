@@ -1,8 +1,9 @@
 package com.example.bank.controllers;
 
 import com.example.bank.dto.*;
-import com.example.bank.models.Card;
+import com.example.bank.models.AccountType;
 import com.example.bank.models.ClientDetails;
+import com.example.bank.services.AccountService;
 import com.example.bank.services.CardService;
 import com.example.bank.services.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class AdminController {
     private final ClientService clientService;
     private final CardService cardService;
+    private final AccountService accountService;
 
     @GetMapping("/clients")
     public String getClientsPage(Model model, HttpServletRequest request) {
@@ -79,9 +81,6 @@ public class AdminController {
         return clientService.findCardByNumber(id, dto, redirectAttributes);
     }
 
-    /*
-    * TODO Полная генерация карты
-    */
     @GetMapping("/clients/{id}/cards/add_card")
     public String getAddCardPage(@PathVariable("id") long id, Model model){
         model.addAttribute("clientId", id);
@@ -106,4 +105,36 @@ public class AdminController {
         cardService.topUpCard(id, dto);
         return "redirect:/admin/cards/"+id+"/top_up";
     }
+
+
+    @GetMapping("/clients/{id}/accounts")
+    public String getAccountsPage(@PathVariable("id") long id, Model model, HttpServletRequest request){
+        ClientDetails client = clientService.getClientById(id);
+        model.addAttribute("client", client);
+        return "admin/clients/accounts/accounts";
+    }
+
+    @GetMapping("/clients/{id}/accounts/add_account")
+    public String getAddAccountPage(@PathVariable("id") long id, Model model){
+        model.addAttribute("clientId", id);
+        model.addAttribute("types", accountService.findAllAccountTypes());
+        return "admin/clients/accounts/add_account";
+    }
+
+    @PostMapping("/clients/{id}/accounts/add_account/{accType}")
+    public String addAccount(@PathVariable("id") long id, @PathVariable("accType") long accType){
+        return clientService.addAccount(id, accType);
+    }
+
+    @GetMapping("/add_account_type")
+    public String getAddAccountTypePage(Model model){
+        model.addAttribute("accountType", new AccountType());
+        return "admin/accountTypes/add_account_type";
+    }
+
+    @PostMapping("/add_account_type")
+    public String addAccountType(AccountType type){
+        return accountService.addAccountType(type);
+    }
+
 }

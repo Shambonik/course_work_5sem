@@ -5,6 +5,9 @@
     <title>Главная</title>
 </head>
 <body>
+<form th:method="get" th:action="@{/client/transaction}">
+    <div><input type="submit" value="Перевод"/></div>
+</form>
 <h2>Карты</h2>
 <div th:each = "card : ${cards}" style="border: 2px dashed; padding: 10px;">
     <span>Номер: </span>
@@ -14,6 +17,7 @@
     <span th:text="${card.getMoney()}"></span>
     <span>  ₽</span>
     <br>
+    <br>
     <form th:method="get" th:action="@{/client/card/{id} (id = ${card.getId()})}">
         <div><input type="submit" value="Действия"/></div>
     </form>
@@ -21,9 +25,16 @@
 </div>
 <h2>Счета</h2>
 <div th:each = "account : ${accounts}" style="border: 2px dashed; padding: 10px;">
-    <span th:text="${account.getNumber()}"></span>
+    <span>Название: </span>
+    <span th:text="${account.getName()}"></span>
+    <br>
+    <span>Процент: </span>
+    <span th:text="${account.getAccountType().getPercent()}"></span>
+    <br>
     <br>
     <span th:text="${account.getMoney()}"></span>
+    <span>  ₽</span>
+    <br>
     <br>
     <form th:method="get" th:action="@{/client/account/{id} (id = ${account.getId()})}">
         <div><input type="submit" value="Действия"/></div>
