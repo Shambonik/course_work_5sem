@@ -1,12 +1,14 @@
 package com.example.bank.dto.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public enum CardAccountEnum {
-    CARD(1, "Карта"),
-    ACCOUNT(2, "Счет");
+    CARD("card", "Карта"),
+    ACCOUNT("account", "Счет");
 
-    private int key;
+    private String key;
     private String value;
 }

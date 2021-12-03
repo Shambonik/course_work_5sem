@@ -5,11 +5,95 @@
     <title>Перевод</title>
 </head>
 <body>
-    <h2>Перевод</h2>
+<h2>Перевод</h2>
+<br>
+<form th:method="put" th:action="@{/client/transaction}" th:object="${transaction}">
+    <div>
+        <span>Перевод с карты или счета?</span>
+        <select id="fromCardOrAccount" name="fromCardOrAccount" class="cardOrAccount" onchange="cardOrAccountChange(this)">
+            <option th:each="item : ${cardOrAccount}" th:value="${item.getKey()}" th:text="${item.getValue()}"></option>
+        </select>
+        <br>
+        <div class="cardAndAccount">
+            <span>Откуда будут списаны средства?</span>
+            <select id="fromNumber" name="fromNumber" class="card">
+                <option th:each="item : ${cards}" th:value="${item.getNumber()}" th:text="${item.getNumber() + ' | ' + item.getMoney() + '₽'}"></option>
+            </select>
+            <select id="fromName" name="fromName" class="account">
+                <option th:each="item : ${accounts}" th:value="${item.getName()}" th:text="${item.getName() + ' | ' + item.getMoney() + '₽'}"></option>
+            </select>
+        </div>
+    </div>
     <br>
     <br>
-    <span>------------------------------------<span>
+    <span>------------------------------------</span>
     <br>
     <br>
+    <div>
+        <span><input type="checkbox" th:field="*{toMeOrNotToMe}" class="toMeCheckbox" onchange="checkboxToMe(this)"/>Перевести себе</span>
+        <div class="toMe">
+            <span>Перевод на карту или счет?</span>
+            <select id="toCardOrAccount" name="toCardOrAccount" class="cardOrAccount" onchange="cardOrAccountChange(this)">
+                <option th:each="item : ${cardOrAccount}" th:value="${item.getKey()}" th:text="${item.getValue()}"></option>
+            </select>
+            <br>
+            <div class="cardAndAccount">
+                <span>Куда будут начислены средства?</span>
+                <select id="toNumber" name="fromNumber" class="card">
+                    <option th:each="item : ${cards}" th:value="${item.getNumber()}" th:text="${item.getNumber() + ' | ' + item.getMoney() + '₽'}"></option>
+                </select>
+                <select id="toName" name="fromName" class="account">
+                    <option th:each="item : ${accounts}" th:value="${item.getName()}" th:text="${item.getName() + ' | ' + item.getMoney() + '₽'}"></option>
+                </select>
+            </div>
+        </div>
+        <div class = "notToMe">
+            <span>Куда будут начислены средства?</span>
+            <br>
+            <span>Номер карты</span>
+            <input type="text" th:field="*{toAnotherNumber}"/>
+        </div>
+        <br>
+    </div>
+    <div><input type="submit" value="Перевести"/></div>
+</form>
+<script>
+    function cardOrAccountChange(selection) {
+        var selectedOption = selection.value;
+        var selections = selection.parentNode.getElementsByClassName("cardAndAccount")[0].getElementsByTagName("select");
+        for(var i = 0; i<selections.length; i++) {
+            if(selections[i].className == selectedOption) {
+                selections[i].hidden = false;
+            }
+            else {
+                selections[i].hidden = true;
+            }
+        }
+    }
+
+    function checkboxToMe(checkbox) {
+        var checked = checkbox.checked;
+        if(checked) {
+            checkbox.parentNode.parentNode.getElementsByClassName("toMe")[0].hidden = false;
+            checkbox.parentNode.parentNode.getElementsByClassName("notToMe")[0].hidden = true;
+        } else {
+            checkbox.parentNode.parentNode.getElementsByClassName("toMe")[0].hidden = true;
+            checkbox.parentNode.parentNode.getElementsByClassName("notToMe")[0].hidden = false;
+        }
+    }
+
+    function onLoad() {
+        var cardOrAccountElements = document.getElementsByClassName("cardOrAccount");
+        for(var i = 0; i<cardOrAccountElements.length; i++) {
+            cardOrAccountChange(cardOrAccountElements[i]);
+        }
+        var toMeCheckboxElements = document.getElementsByClassName("toMeCheckbox");
+        for(var i = 0; i<cardOrAccountElements.length; i++) {
+            checkboxToMe(toMeCheckboxElements[i]);
+        }
+    }
+
+    window.addEventListener("load", onLoad);
+</script>
 </body>
 </html>
